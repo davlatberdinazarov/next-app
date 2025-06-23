@@ -27,6 +27,18 @@ const nextConfig = {
   // optimizeFonts: true, // O'chirildi yoki kommentariyaga olindi
   // Enable SWC minification
   // swcMinify: true, // O'chirildi yoki kommentariyaga olindi
+
+  reactStrictMode: true,
+  // uploads folder uchun ruxsat
+  async rewrites() {
+    return [
+      {
+        source: '/uploads/:path*',
+        destination: '/uploads/:path*'
+      }
+    ]
+  }
+
 }
 
 export default nextConfig;
