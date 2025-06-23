@@ -21,10 +21,6 @@ Thumbs.db
 
 # Optional: SQLite yoki lokal fayl bazasi
 
-# Local uploads (agar mavjud bo‘lsa)
-public/uploads/
-uploads/
-
 # VSCode / WebStorm va boshqa IDE sozlamalari
 .vscode/
 .idea/
