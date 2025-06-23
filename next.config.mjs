@@ -10,7 +10,7 @@ const nextConfig = {
     unoptimized: true,
     domains: ['placeholder.svg', 'blob.v0.dev'],
     formats: ['image/webp', 'image/avif'],
-    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
+    minimumCacheTTL: 60 * 60 * 24 * 30,
   },
   experimental: {
     optimizeCss: true,
@@ -19,26 +19,19 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
-  // Enable compression
   compress: true,
-  // Enable static optimization
   trailingSlash: false,
-  // Optimize fonts
-  // optimizeFonts: true, // O'chirildi yoki kommentariyaga olindi
-  // Enable SWC minification
-  // swcMinify: true, // O'chirildi yoki kommentariyaga olindi
-
   reactStrictMode: true,
-  // uploads folder uchun ruxsat
   async rewrites() {
     return [
       {
         source: '/uploads/:path*',
-        destination: '/uploads/:path*'
-      }
-    ]
-  }
+        destination: '/uploads/:path*',
+      },
+    ];
+  },
+};
 
-}
-
-export default nextConfig;
+// ❌ export default nextConfig;
+// ✅ CommonJS format:
+module.exports = nextConfig;
