@@ -1,51 +1,44 @@
-"use client";
-
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
-import {
-  ShoppingCart,
-  Star,
-  Truck,
-  Shield,
-  Headphones,
-  Menu,
-  Sparkles,
-} from "lucide-react";
-import { useEffect, useState } from "react";
-import { Mahsulot } from "@/types";
-import { http } from "@/http";
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { ShoppingCart, Star, Truck, Shield, Headphones, Menu, Sparkles } from "lucide-react"
 
 export default function LandingPage() {
-  const [mahsulotlar, setMahsulotlar] = useState<Mahsulot[]>([]);
+  const mahsulotlar = [
+    {
+      id: 1,
+      nom: "Premium Smartfon",
+      narx: 2500000,
+      chegirma_narx: 2000000,
+      rasm: "/placeholder.svg?height=300&width=300",
+      rang: "Qora",
+      mavjud: true,
+    },
+    {
+      id: 2,
+      nom: "Wireless Quloqchin",
+      narx: 500000,
+      chegirma_narx: null,
+      rasm: "/placeholder.svg?height=300&width=300",
+      rang: "Oq",
+      mavjud: true,
+    },
+    {
+      id: 3,
+      nom: "Smart Soat",
+      narx: 1200000,
+      chegirma_narx: 900000,
+      rasm: "/placeholder.svg?height=300&width=300",
+      rang: "Kumush",
+      mavjud: false,
+    },
+  ]
 
-  const fetchPrdocuts = async () => {
-    try {
-      const response = await http.get("/mahsulotlar");
-      if (response.status === 200) {
-        setMahsulotlar(response.data);
-      } else {
-        console.error("Mahsulotlarni yuklashda xatolik:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Mahsulotlarni yuklashda xatolik:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchPrdocuts();
-  }, []);
   const chegirma_foizi = (asl_narx: number, chegirma_narx: number) => {
-    return Math.round(((asl_narx - chegirma_narx) / asl_narx) * 100);
-  };
+    return Math.round(((asl_narx - chegirma_narx) / asl_narx) * 100)
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -65,33 +58,20 @@ export default function LandingPage() {
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-6 lg:space-x-8">
-              <Link
-                href="#mahsulotlar"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
+              <Link href="#mahsulotlar" className="text-muted-foreground hover:text-primary transition-colors">
                 Mahsulotlar
               </Link>
-              <Link
-                href="#xizmatlar"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
+              <Link href="#xizmatlar" className="text-muted-foreground hover:text-primary transition-colors">
                 Xizmatlar
               </Link>
-              <Link
-                href="#aloqa"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
+              <Link href="#aloqa" className="text-muted-foreground hover:text-primary transition-colors">
                 Aloqa
               </Link>
             </nav>
 
             <div className="flex items-center space-x-2 sm:space-x-4">
               {/* Mobile menu button */}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="md:hidden hover:bg-muted/50"
-              >
+              <Button variant="ghost" size="sm" className="md:hidden hover:bg-muted/50">
                 <Menu className="h-5 w-5" />
               </Button>
 
@@ -119,8 +99,7 @@ export default function LandingPage() {
             Eng Yaxshi Texnologiyalar
           </h1>
           <p className="text-lg sm:text-xl mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed opacity-90">
-            Zamonaviy gadjetlar va aksessuarlar eng qulay narxlarda. Sifatli
-            mahsulotlar va tez yetkazib berish.
+            Zamonaviy gadjetlar va aksessuarlar eng qulay narxlarda. Sifatli mahsulotlar va tez yetkazib berish.
           </p>
           <Button
             size="lg"
@@ -140,27 +119,21 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             <div className="text-center p-4 sm:p-6 bg-card/80 backdrop-blur-sm rounded-xl border border-border/50 hover:border-primary/30 transition-all duration-300 shadow-sm hover:shadow-md">
               <Truck className="h-10 w-10 sm:h-12 sm:w-12 text-primary mx-auto mb-3 sm:mb-4" />
-              <h3 className="text-lg sm:text-xl font-semibold mb-2 text-foreground">
-                Tez Yetkazib Berish
-              </h3>
+              <h3 className="text-lg sm:text-xl font-semibold mb-2 text-foreground">Tez Yetkazib Berish</h3>
               <p className="text-muted-foreground text-sm sm:text-base">
                 24 soat ichida barcha buyurtmalarni yetkazib beramiz
               </p>
             </div>
             <div className="text-center p-4 sm:p-6 bg-card/80 backdrop-blur-sm rounded-xl border border-border/50 hover:border-primary/30 transition-all duration-300 shadow-sm hover:shadow-md">
               <Shield className="h-10 w-10 sm:h-12 sm:w-12 text-primary mx-auto mb-3 sm:mb-4" />
-              <h3 className="text-lg sm:text-xl font-semibold mb-2 text-foreground">
-                Kafolat
-              </h3>
+              <h3 className="text-lg sm:text-xl font-semibold mb-2 text-foreground">Kafolat</h3>
               <p className="text-muted-foreground text-sm sm:text-base">
                 Barcha mahsulotlarga 1 yillik kafolat beramiz
               </p>
             </div>
             <div className="text-center p-4 sm:p-6 bg-card/80 backdrop-blur-sm rounded-xl border border-border/50 hover:border-primary/30 transition-all duration-300 shadow-sm hover:shadow-md sm:col-span-2 lg:col-span-1">
               <Headphones className="h-10 w-10 sm:h-12 sm:w-12 text-primary mx-auto mb-3 sm:mb-4" />
-              <h3 className="text-lg sm:text-xl font-semibold mb-2 text-foreground">
-                24/7 Qo'llab-quvvatlash
-              </h3>
+              <h3 className="text-lg sm:text-xl font-semibold mb-2 text-foreground">24/7 Qo'llab-quvvatlash</h3>
               <p className="text-muted-foreground text-sm sm:text-base">
                 Har qanday savolingiz bo'yicha yordam beramiz
               </p>
@@ -176,90 +149,70 @@ export default function LandingPage() {
             Mashhur Mahsulotlar
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {mahsulotlar.map((mahsulot) => {
-              const mavjud = mahsulot.miqdor > 0;
-              const asosiyRasm = mahsulot.rasmlar?.[0] || "/placeholder.svg";
-              const asosiyRang = mahsulot.ranglar?.[0]?.rang || "Nomaʼlum";
-
-              return (
-                <Card
-                  key={mahsulot.id}
-                  className="overflow-hidden hover:shadow-lg transition-all duration-300 border-border/50 hover:border-primary/30 group bg-card/80 backdrop-blur-sm"
-                >
-                  <div className="relative">
-                    <img
-                      src={asosiyRasm}
-                      alt={mahsulot.nom}
-                      loading="lazy"
-                      className="w-full h-48 sm:h-64 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    {mahsulot.chegirma_narx && (
-                      <Badge className="absolute top-2 right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs sm:text-sm shadow-lg">
-                        -{chegirma_foizi(mahsulot.narx, mahsulot.chegirma_narx)}
-                        %
+            {mahsulotlar.map((mahsulot) => (
+              <Card
+                key={mahsulot.id}
+                className="overflow-hidden hover:shadow-lg transition-all duration-300 border-border/50 hover:border-primary/30 group bg-card/80 backdrop-blur-sm"
+              >
+                <div className="relative">
+                  <img
+                    src={mahsulot.rasm || "/placeholder.svg"}
+                    alt={mahsulot.nom}
+                    className="w-full h-48 sm:h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  {mahsulot.chegirma_narx && (
+                    <Badge className="absolute top-2 right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs sm:text-sm shadow-lg">
+                      -{chegirma_foizi(mahsulot.narx, mahsulot.chegirma_narx)}%
+                    </Badge>
+                  )}
+                  {!mahsulot.mavjud && (
+                    <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center">
+                      <Badge variant="secondary" className="text-sm sm:text-base bg-muted text-muted-foreground">
+                        Tugagan
                       </Badge>
-                    )}
-                    {!mavjud && (
-                      <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center">
-                        <Badge
-                          variant="secondary"
-                          className="text-sm sm:text-base bg-muted text-muted-foreground"
-                        >
-                          Tugagan
-                        </Badge>
-                      </div>
-                    )}
-                  </div>
-                  <CardHeader className="p-4 sm:p-6">
-                    <CardTitle className="text-base sm:text-lg text-foreground">
-                      {mahsulot.nom}
-                    </CardTitle>
-                    <CardDescription className="text-sm text-muted-foreground">
-                      Rang: {asosiyRang}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="p-4 sm:p-6 pt-0">
-                    <div className="flex items-center justify-between mb-3 sm:mb-4">
-                      <div>
-                        {mahsulot.chegirma_narx ? (
-                          <div>
-                            <span className="text-lg sm:text-2xl font-bold text-primary">
-                              {mahsulot.chegirma_narx.toLocaleString()} so'm
-                            </span>
-                            <span className="text-xs sm:text-sm text-muted-foreground line-through ml-2 block sm:inline">
-                              {mahsulot.narx.toLocaleString()} so'm
-                            </span>
-                          </div>
-                        ) : (
-                          <span className="text-lg sm:text-2xl font-bold text-foreground">
+                    </div>
+                  )}
+                </div>
+                <CardHeader className="p-4 sm:p-6">
+                  <CardTitle className="text-base sm:text-lg text-foreground">{mahsulot.nom}</CardTitle>
+                  <CardDescription className="text-sm text-muted-foreground">Rang: {mahsulot.rang}</CardDescription>
+                </CardHeader>
+                <CardContent className="p-4 sm:p-6 pt-0">
+                  <div className="flex items-center justify-between mb-3 sm:mb-4">
+                    <div>
+                      {mahsulot.chegirma_narx ? (
+                        <div>
+                          <span className="text-lg sm:text-2xl font-bold text-primary">
+                            {mahsulot.chegirma_narx.toLocaleString()} so'm
+                          </span>
+                          <span className="text-xs sm:text-sm text-muted-foreground line-through ml-2 block sm:inline">
                             {mahsulot.narx.toLocaleString()} so'm
                           </span>
-                        )}
-                      </div>
+                        </div>
+                      ) : (
+                        <span className="text-lg sm:text-2xl font-bold text-foreground">
+                          {mahsulot.narx.toLocaleString()} so'm
+                        </span>
+                      )}
                     </div>
-                    <div className="flex items-center mb-3 sm:mb-4">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className="h-3 w-3 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400"
-                        />
-                      ))}
-                      <span className="text-xs sm:text-sm text-muted-foreground ml-2">
-                        (4.8)
-                      </span>
-                    </div>
-                    <Link href={`/mahsulot/${mahsulot.id}`}>
-                      <Button
-                        className="w-full text-sm sm:text-base bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-md"
-                        disabled={!mavjud}
-                      >
-                        {mavjud ? "Ko'rish" : "Tugagan"}
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              );
-            })}
+                  </div>
+                  <div className="flex items-center mb-3 sm:mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-3 w-3 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400" />
+                    ))}
+                    <span className="text-xs sm:text-sm text-muted-foreground ml-2">(4.8)</span>
+                  </div>
+                  <Link href={`/mahsulot/${mahsulot.id}`}>
+                    <Button
+                      className="w-full text-sm sm:text-base bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-md"
+                      disabled={!mahsulot.mavjud}
+                    >
+                      {mahsulot.mavjud ? "Ko'rish" : "Tugagan"}
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
@@ -280,47 +233,25 @@ export default function LandingPage() {
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-foreground">
-                Mahsulotlar
-              </h3>
+              <h3 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-foreground">Mahsulotlar</h3>
               <ul className="space-y-1 sm:space-y-2 text-muted-foreground text-sm sm:text-base">
-                <li className="hover:text-primary transition-colors cursor-pointer">
-                  Smartfonlar
-                </li>
-                <li className="hover:text-primary transition-colors cursor-pointer">
-                  Noutbuklar
-                </li>
-                <li className="hover:text-primary transition-colors cursor-pointer">
-                  Aksessuarlar
-                </li>
-                <li className="hover:text-primary transition-colors cursor-pointer">
-                  Smart uy
-                </li>
+                <li className="hover:text-primary transition-colors cursor-pointer">Smartfonlar</li>
+                <li className="hover:text-primary transition-colors cursor-pointer">Noutbuklar</li>
+                <li className="hover:text-primary transition-colors cursor-pointer">Aksessuarlar</li>
+                <li className="hover:text-primary transition-colors cursor-pointer">Smart uy</li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-foreground">
-                Xizmatlar
-              </h3>
+              <h3 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-foreground">Xizmatlar</h3>
               <ul className="space-y-1 sm:space-y-2 text-muted-foreground text-sm sm:text-base">
-                <li className="hover:text-primary transition-colors cursor-pointer">
-                  Yetkazib berish
-                </li>
-                <li className="hover:text-primary transition-colors cursor-pointer">
-                  Kafolat
-                </li>
-                <li className="hover:text-primary transition-colors cursor-pointer">
-                  Ta'mirlash
-                </li>
-                <li className="hover:text-primary transition-colors cursor-pointer">
-                  Qo'llab-quvvatlash
-                </li>
+                <li className="hover:text-primary transition-colors cursor-pointer">Yetkazib berish</li>
+                <li className="hover:text-primary transition-colors cursor-pointer">Kafolat</li>
+                <li className="hover:text-primary transition-colors cursor-pointer">Ta'mirlash</li>
+                <li className="hover:text-primary transition-colors cursor-pointer">Qo'llab-quvvatlash</li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-foreground">
-                Aloqa
-              </h3>
+              <h3 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-foreground">Aloqa</h3>
               <ul className="space-y-1 sm:space-y-2 text-muted-foreground text-sm sm:text-base">
                 <li>+998 90 123 45 67</li>
                 <li>info@techstore.uz</li>
@@ -334,5 +265,5 @@ export default function LandingPage() {
         </div>
       </footer>
     </div>
-  );
+  )
 }

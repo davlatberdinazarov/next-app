@@ -4,12 +4,17 @@ import { writeFile, mkdir } from "fs/promises"
 import { randomBytes } from "crypto"
 import { existsSync } from "fs"
 
-// Rasmlar saqlanadigan papka
 const UPLOADS_DIR = join(process.cwd(), "public", "uploads")
 
 export async function POST(request: NextRequest) {
   try {
-    // Papkani tekshirish va yaratish
+    // Content-Type: multipart/form-data bo'lishi shart
+    const contentType = request.headers.get("content-type") || ""
+    if (!contentType.includes("multipart/form-data")) {
+      return NextResponse.json({ xato: "Noto'g'ri Content-Type" }, { status: 400 })
+    }
+
+    // uploads papkasini yaratish
     if (!existsSync(UPLOADS_DIR)) {
       await mkdir(UPLOADS_DIR, { recursive: true })
     }
@@ -21,19 +26,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ xato: "Fayl topilmadi" }, { status: 400 })
     }
 
-    // Fayl nomini xavfsiz qilish
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 
-    // Noyob fayl nomi yaratish
-    const fileExt = file.name.split(".").pop() || "jpg"
-    const fileName = `${randomBytes(16).toString("hex")}.${fileExt}`
+    const ext = file.name.split(".").pop() || "jpg"
+    const fileName = `${randomBytes(16).toString("hex")}.${ext}`
     const filePath = join(UPLOADS_DIR, fileName)
 
-    // Faylni saqlash
     await writeFile(filePath, buffer)
 
-    // Fayl URL ni qaytarish
     const fileUrl = `/uploads/${fileName}`
 
     return NextResponse.json({
@@ -45,6 +46,6 @@ export async function POST(request: NextRequest) {
     })
   } catch (xato) {
     console.error("Fayl yuklashda xato:", xato)
-    return NextResponse.json({ xato: "Fayl yuklashda xato yuz berdi" }, { status: 500 })
+    return NextResponse.json({ xato: "Fayl yuklashda xatolik yuz berdi" }, { status: 500 })
   }
 }

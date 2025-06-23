@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-
+import { UploadClient } from "@uploadcare/upload-client"
 import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -61,6 +61,8 @@ export default function MahsulotQoshish() {
   const [mahsulotRasmlari, setMahsulotRasmlari] = useState<string[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
   const rangFileInputRefs = useRef<{ [key: number]: HTMLInputElement | null }>({})
+
+  const uploadClient = new UploadClient({ publicKey: "e7f698ac515e7bc2a498" }) 
 
   useEffect(() => {
     sheetlarni_yuklash()
@@ -129,45 +131,50 @@ export default function MahsulotQoshish() {
     return 0
   }
 
-  const rasmYuklash = async (file: File): Promise<string> => {
-    const formData = new FormData()
-    formData.append("file", file)
+const rasmYuklash = async (file: File): Promise<string> => {
+  try {
+    const result = await uploadClient.uploadFile(file)
+    return result.cdnUrl // bu URL ni siz frontendga saqlaysiz
+  } catch (err) {
+    console.error("Yuklashda xatolik:", err)
+    throw new Error("Rasm yuklashda xato yuz berdi")
+  }
+}
 
-    const javob = await fetch("/api/upload", {
-      method: "POST",
-      body: formData,
+const mahsulotRasmYuklash = async (
+  e: React.ChangeEvent<HTMLInputElement>
+) => {
+  const files = e.target.files
+  if (!files || files.length === 0) return
+
+  try {
+    const fayllar = Array.from(files)
+
+    // Yuklashlar
+    const yuklashNatijalari = await Promise.all(
+      fayllar.map((file) => rasmYuklash(file))
+    )
+
+    // URLlarni holatga qo‘shish
+    setMahsulotRasmlari((oldin) => [...oldin, ...yuklashNatijalari])
+
+    toast({
+      title: "✅ Muvaffaqiyatli",
+      description: `${fayllar.length} ta rasm yuklandi`,
     })
-
-    if (!javob.ok) {
-      throw new Error("Rasm yuklashda xato")
-    }
-
-    const data = await javob.json()
-    return data.fayl.url
+  } catch (err) {
+    console.error("❌ Rasm yuklashda xato:", err)
+    toast({
+      title: "Xatolik",
+      description: "Rasm yuklashda xatolik yuz berdi",
+      variant: "destructive",
+    })
+  } finally {
+    // Fayl inputni tozalash (shu inputni qayta ishlatish uchun)
+    e.target.value = ""
   }
+}
 
-  const mahsulotRasmYuklash = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || e.target.files.length === 0) return
-
-    try {
-      const files = Array.from(e.target.files)
-      const uploadPromises = files.map((file) => rasmYuklash(file))
-      const urls = await Promise.all(uploadPromises)
-
-      setMahsulotRasmlari((prev) => [...prev, ...urls])
-      toast({
-        title: "Muvaffaqiyatli",
-        description: `${files.length} ta rasm yuklandi`,
-      })
-    } catch (xato) {
-      console.error("Rasm yuklashda xato:", xato)
-      toast({
-        title: "Xato",
-        description: "Rasm yuklashda xatolik yuz berdi",
-        variant: "destructive",
-      })
-    }
-  }
 
   const rasmOchirish = (index: number) => {
     setMahsulotRasmlari((prev) => prev.filter((_, i) => i !== index))
@@ -369,28 +376,31 @@ export default function MahsulotQoshish() {
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {mahsulotRasmlari.map((rasm, index) => (
-                  <div key={index} className="relative group">
-                    <div className="aspect-square rounded-lg overflow-hidden bg-slate-700">
-                      <img
-                        src={`${BASE_URL + rasm}`  || "/placeholder.svg"}
-                        alt={`Mahsulot rasmi ${index + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      className="absolute top-2 right-2 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-                      onClick={() => rasmOchirish(index)}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                    <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
-                      {index + 1}
-                    </div>
-                  </div>
-                ))}
+{mahsulotRasmlari.map((rasm, index) => (
+  <div key={index} className="relative group">
+    <div className="aspect-square rounded-lg overflow-hidden bg-slate-700">
+      <img
+        src={rasm || "/placeholder.svg"}
+        alt={`Mahsulot rasmi ${index + 1}`}
+        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+      />
+    </div>
+
+    <Button
+      variant="destructive"
+      size="icon"
+      className="absolute top-2 right-2 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+      onClick={() => rasmOchirish(index)}
+    >
+      <X className="h-4 w-4" />
+    </Button>
+
+    <div className="absolute bottom-2 left-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
+      {index + 1}
+    </div>
+  </div>
+))}
+
               </div>
             )}
           </div>
