@@ -7,9 +7,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v3
 
       - name: Deploy via SSH
@@ -19,8 +18,8 @@ jobs:
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /root/next-app && \
-            git pull origin main && \
-            yarn install && \
-            yarn build && \
+            cd /root/next-app
+            git pull origin main
+            yarn install
+            yarn build
             pm2 restart next-app
