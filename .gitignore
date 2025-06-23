@@ -1,0 +1,47 @@
+# Node modules
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env files
+.env*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Optional: SQLite yoki lokal fayl bazasi
+
+# Local uploads (agar mavjud bo‘lsa)
+public/uploads/
+uploads/
+
+# VSCode / WebStorm va boshqa IDE sozlamalari
+.vscode/
+.idea/
+
+# MacOS-specific
+*.swp
+
+# Optional: typescript build
+dist/
+*.tsbuildinfo
+
+# Optional: vercel/git deployment artifacts
+.vercel/
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Optional: next/image cache
+.cache/
