@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Plus, Trash2, Copy, Upload, X, ImageIcon } from "lucide-react"
 import { toast } from "@/components/ui/use-toast"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { BASE_URL } from "@/http"
 
 interface GoogleSheet {
   id: number
@@ -372,7 +373,7 @@ export default function MahsulotQoshish() {
                   <div key={index} className="relative group">
                     <div className="aspect-square rounded-lg overflow-hidden bg-slate-700">
                       <img
-                        src={rasm || "/placeholder.svg"}
+                        src={`${BASE_URL + rasm}`  || "/placeholder.svg"}
                         alt={`Mahsulot rasmi ${index + 1}`}
                         className="w-full h-full object-cover"
                       />
@@ -553,7 +554,7 @@ export default function MahsulotQoshish() {
                           )}
                           <input
                             type="file"
-                            ref={(el) => (rangFileInputRefs.current[index] = el)}
+                            ref={(el) => { rangFileInputRefs.current[index] = el }}
                             className="hidden"
                             accept="image/*"
                             onChange={(e) => rangRasmYuklash(e, index)}

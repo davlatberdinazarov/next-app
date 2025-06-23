@@ -21,15 +21,15 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Mahsulot } from "@/types";
+import { http } from "@/http";
 
 export default function LandingPage() {
   const [mahsulotlar, setMahsulotlar] = useState<Mahsulot[]>([]);
 
   const fetchPrdocuts = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/mahsulotlar");
+      const response = await http.get("/mahsulotlar");
       if (response.status === 200) {
         setMahsulotlar(response.data);
       } else {
