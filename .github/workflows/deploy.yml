@@ -7,8 +7,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Deploy via SSH
@@ -17,9 +18,11 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
           script: |
             cd /root/next-app
+            git reset --hard HEAD
             git pull origin main
-            yarn install
+            yarn install --frozen-lockfile
             yarn build
-            pm2 restart next-app
+            pm2 restart next-app || pm2 start "yarn start" --name next-app
